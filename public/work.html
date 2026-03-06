@@ -54,9 +54,13 @@
         .work-item:hover .work-overlay { opacity: 1; }
         .work-category { color: var(--gradient-2); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
         .work-title { font-size: 1.5rem; font-family: 'DM Sans', sans-serif; font-weight: 600; }
-        .about-section { background: var(--bg-secondary); border-radius: 24px; margin: 2rem; padding: 4rem 3rem; text-align: center; }
-        .about-section blockquote { font-size: clamp(1.25rem, 2.5vw, 1.75rem); line-height: 1.5; margin: 1.5rem 0; }
-        .about-section cite { color: var(--text-secondary); font-style: normal; }
+        .testimonial-section { background: var(--bg-secondary); border-radius: 24px; margin: 4rem 2rem; padding: 5rem 3rem; text-align: center; max-width: 1200px; margin-left: auto; margin-right: auto; }
+        .testimonial-section .quote-icon { font-size: 3rem; color: var(--gradient-2); opacity: 0.3; margin-bottom: 1rem; }
+        .testimonial-section blockquote { font-size: clamp(1.25rem, 2.5vw, 1.75rem); line-height: 1.6; margin: 1.5rem 0; color: var(--text-primary); font-style: italic; }
+        .testimonial-section cite { color: var(--text-secondary); font-style: normal; }
+        .testimonial-section .client-info { margin-top: 1rem; }
+        .testimonial-section .client-name { font-weight: 600; color: var(--text-primary); }
+        .testimonial-section .client-role { font-size: 0.85rem; color: var(--text-muted); }
         .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 1.75rem; font-size: 0.9rem; font-weight: 500; border-radius: 50px; }
         .btn-primary { background: var(--text-primary); color: var(--bg-primary); }
         footer { padding: 3rem 2rem; border-top: 1px solid var(--border); }
@@ -66,7 +70,11 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-secondary); }
         ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
-        @media (max-width: 768px) { .work-grid { grid-template-columns: 1fr; } .footer-content { flex-direction: column; gap: 1.5rem; } }
+        @media (max-width: 768px) { 
+            .work-grid { grid-template-columns: 1fr; } 
+            .testimonial-section { margin: 2rem 1rem; padding: 3rem 1.5rem; }
+            .footer-content { flex-direction: column; gap: 1.5rem; } 
+        }
     </style>
 </head>
 <body>
@@ -114,10 +122,14 @@
             </div>
         </section>
 
-        <section class="about-section">
+        <section class="testimonial-section">
+            <div class="quote-icon">"</div>
             <p style="color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;">Testimonials</p>
-            <blockquote>"Working with this team transformed our digital presence. They delivered beyond our expectations."</blockquote>
-            <cite>— John Smith, CEO of Tech Startup</cite>
+            <blockquote>Working with this team transformed our digital presence. They delivered beyond our expectations and continues to be an invaluable partner.</blockquote>
+            <div class="client-info">
+                <cite class="client-name">— John Smith</cite><br>
+                <span class="client-role">CEO of Tech Startup</span>
+            </div>
         </section>
 
         <section>
