@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Agency</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <link rel="stylesheet" href="/build/assets/app-C4sBPfzo.css">
+    <script src="/build/assets/app-BuG9aa18.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0C0C0C;
+            --bg-secondary: #141414;
+            --bg-tertiary: #1C1C1C;
+            --text-primary: #FFFFFF;
+            --text-secondary: #888888;
+            --text-muted: #555555;
+            --accent: #FFFFFF;
+            --accent-hover: #CCCCCC;
+            --border: #2A2A2A;
+            --gradient-1: #FF6B35;
+            --gradient-2: #F7C94B;
+            --gradient-3: #4ECDC4;
+            --nav-bg: rgba(255, 255, 255, 0.05);
+            --nav-border: rgba(255, 255, 255, 0.08);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #F5F5F5;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #FAFAFA;
+            --text-primary: #0A0A0A;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --accent: #0A0A0A;
+            --accent-hover: #333333;
+            --border: #E5E5E5;
+            --nav-bg: rgba(255, 255, 255, 0.8);
+            --nav-border: rgba(0, 0, 0, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: 'DM Sans', sans-serif; 
+            background-color: var(--bg-primary); 
+            color: var(--text-primary); 
+            overflow-x: hidden; 
+            line-height: 1.5; 
+            padding-bottom: 120px;
+            cursor: none;
+        }
+        h1, h2, h3, h4, h5, h6 { font-family: 'DM Serif Display', serif; font-weight: 400; line-height: 1.1; }
+        a { color: inherit; text-decoration: none; }
+
+        /* Full inline CSS from base.blade.php - shortened for brevity */
+        .logo { position: fixed; top: 2rem; left: 2rem; font-size: 1.25rem; font-weight: 600; z-index: 100; }
+        nav { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 100; display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1rem; background: var(--nav-bg); backdrop-filter: blur(20px); border-radius: 100px; border: 1px solid var(--nav-border); }
+        .nav-item { padding: 0.6rem 1.25rem; font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); border-radius: 50px; }
+        .nav-item:hover, .nav-item.active { color: var(--text-primary); }
+        .nav-item.active { background: var(--text-primary); color: var(--bg-primary); }
+        .theme-toggle { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 50%; cursor: pointer; margin-left: 0.5rem; }
+        
+        .cursor { position: fixed; width: 20px; height: 20px; border: 1.5px solid var(--text-primary); border-radius: 50%; pointer-events: none; z-index: 9999; transition: transform 0.15s; mix-blend-mode: difference; }
+        .cursor-dot { position: fixed; width: 6px; height: 6px; background: var(--text-primary); border-radius: 50%; pointer-events: none; z-index: 9999; }
+        .cursor.hover { transform: scale(1.5); }
+
+        /* Tunnel effect */
+        .bg-tunnel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -3; background: var(--bg-primary); }
+        .tunnel-light { position: fixed; top: 50%; left: 50%; width: 600px; height: 600px; transform: translate(-50%, -50%); background: radial-gradient(circle, var(--accent) 0%, transparent 70%); opacity: 0.15; animation: lightPulse 4s ease-in-out infinite; pointer-events: none; z-index: -2; }
+        @keyframes lightPulse { 0%, 100% { opacity: 0.1; transform: translate(-50%, -50%) scale(1); } 50% { opacity: 0.2; transform: translate(-50%, -50%) scale(1.2); } }
+        .tunnel-rings { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100vmax; height: 100vmax; pointer-events: none; z-index: -1; }
+        .ring { position: absolute; top: 50%; left: 50%; border: 1px solid var(--accent); border-radius: 50%; transform: translate(-50%, -50%); opacity: 0; animation: ringMove 4s linear infinite; }
+        .ring:nth-child(1) { width: 100px; height: 100px; animation-delay: 0s; }
+        .ring:nth-child(2) { width: 250px; height: 250px; animation-delay: 0.5s; }
+        .ring:nth-child(3) { width: 400px; height: 400px; animation-delay: 1s; }
+        .ring:nth-child(4) { width: 550px; height: 550px; animation-delay: 1.5s; }
+        @keyframes ringMove { 0% { width: 0; height: 0; opacity: 0; } 10% { opacity: 0.2; } 90% { opacity: 0.05; } 100% { width: 100vmax; height: 100vmax; opacity: 0; } }
+
+        /* Page content */
+        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 4rem 2rem; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 50px; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 2rem; }
+        .hero-badge span { width: 6px; height: 6px; background: var(--gradient-1); border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .hero h1 { font-size: clamp(3rem, 10vw, 7rem); letter-spacing: -0.03em; margin-bottom: 1.5rem; }
+        .hero p { font-size: 1.125rem; color: var(--text-secondary); max-width: 480px; margin-bottom: 2.5rem; }
+        .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+        .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 1.75rem; font-size: 0.9rem; font-weight: 500; border-radius: 50px; }
+        .btn-primary { background: var(--text-primary); color: var(--bg-primary); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255,255,255,0.15); }
+        .btn-secondary { background: transparent; color: var(--text-primary); border: 1px solid var(--border); }
+        
+        section { padding: 8rem 2rem; max-width: 1200px; margin: 0 auto; }
+        .section-header { margin-bottom: 4rem; }
+        .section-label { display: inline-block; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1rem; }
+        .section-title { font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.02em; }
+        
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .service-card { padding: 2rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 16px; transition: all 0.4s; }
+        .service-card:hover { transform: translateY(-4px); border-color: var(--text-secondary); }
+        .service-icon { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; background: var(--bg-tertiary); border-radius: 12px; font-size: 1.5rem; margin-bottom: 1.5rem; }
+        .service-card h3 { font-size: 1.35rem; margin-bottom: 0.75rem; font-family: 'DM Sans', sans-serif; font-weight: 600; }
+        .service-card p { color: var(--text-secondary); font-size: 0.9rem; }
+
+        .about-section { background: var(--bg-secondary); border-radius: 24px; margin: 4rem 2rem; padding: 6rem; max-width: 1400px; margin-left: auto; margin-right: auto; }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .stat-item { padding: 1.5rem; background: var(--bg-tertiary); border-radius: 12px; text-align: center; }
+        .stat-number { font-size: 2.5rem; font-weight: 600; background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .work-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+        .work-item { position: relative; aspect-ratio: 4/3; border-radius: 16px; overflow: hidden; background: var(--bg-secondary); }
+        .work-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary)); font-size: 4rem; }
+        .work-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); display: flex; flex-direction: column; justify-content: flex-end; padding: 2rem; opacity: 0; transition: opacity 0.4s; }
+        .work-item:hover .work-overlay { opacity: 1; }
+
+        .contact-section { background: var(--bg-secondary); border-radius: 24px; margin: 4rem 2rem; padding: 6rem; max-width: 1400px; margin-left: auto; margin-right: auto; }
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+        .contact-form { display: flex; flex-direction: column; gap: 1.25rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-group label { font-size: 0.8rem; color: var(--text-muted); }
+        .form-group input, .form-group textarea, .form-group select { padding: 1rem; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary); font-family: inherit; }
+        .btn-submit { padding: 1rem 2rem; background: var(--text-primary); color: var(--bg-primary); border: none; border-radius: 10px; font-weight: 600; cursor: pointer; align-self: flex-start; }
+
+        footer { padding: 3rem 2rem; border-top: 1px solid var(--border); text-align: center; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .footer-links { display: flex; gap: 2rem; }
+        .footer-links a { color: var(--text-secondary); font-size: 0.85rem; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+
+        @media (max-width: 768px) {
+            .about-grid, .contact-grid, .work-grid { grid-template-columns: 1fr; }
+            .about-section, .contact-section { margin: 2rem; padding: 2rem; }
+            .footer-content { flex-direction: column; gap: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+    <div class="bg-tunnel">
+        <div class="tunnel-light"></div>
+        <div class="tunnel-rings">
+            <div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div>
+        </div>
+    </div>
+
+    <a href="/" class="logo">Agency.</a>
+    <nav>
+        <a href="/" class="nav-item active">Home</a>
+        <a href="/capabilities" class="nav-item">Services</a>
+        <a href="/work" class="nav-item">Work</a>
+        <a href="/say-hi" class="nav-item">Contact</a>
+        <button class="theme-toggle" id="themeToggle"><i class="ph ph-moon"></i></button>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-badge"><span></span> Digital Agency</div>
+            <h1>We Create Digital Experiences</h1>
+            <p>Strategic design and development for brands that want to make an impact in the digital world.</p>
+            <div class="hero-cta">
+                <a href="/work" class="btn btn-primary">View Work <i class="ph ph-arrow-right"></i></a>
+                <a href="/say-hi" class="btn btn-secondary">Get in Touch</a>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <p class="section-label">What We Do</p>
+                <h2 class="section-title">Services</h2>
+            </div>
+            <div class="services-grid">
+                <div class="service-card"><div class="service-icon"><i class="ph ph-share-network"></i></div><h3>Social Media</h3><p>Strategic content creation and community management.</p></div>
+                <div class="service-card"><div class="service-icon"><i class="ph ph-chart-line-up"></i></div><h3>Digital Ads</h3><p>Data-driven campaigns to maximize ROI.</p></div>
+                <div class="service-card"><div class="service-icon"><i class="ph ph-paint-brush"></i></div><h3>Creative Design</h3><p>Brand identity and visual design.</p></div>
+                <div class="service-card"><div class="service-icon"><i class="ph ph-code"></i></div><h3>Web Development</h3><p>Custom websites built with modern tech.</p></div>
+                <div class="service-card"><div class="service-icon"><i class="ph ph-device-mobile"></i></div><h3>App Development</h3><p>Native and cross-platform mobile apps.</p></div>
+                <div class="service-card"><div class="service-icon"><i class="ph ph-megaphone"></i></div><h3>Brand Strategy</h3><p>Comprehensive branding solutions.</p></div>
+                <div class="service-card"><div class="service-icon"><i class="ph ph-video"></i></div><h3>Video Production</h3><p>Professional video content.</p></div>
+                <div class="service-card"><div class="service-icon"><i class="ph ph-magnifying-glass"></i></div><h3>SEO & Analytics</h3><p>Search optimization and data analytics.</p></div>
+                <div class="service-card"><div class="service-icon"><i class="ph ph-shopping-cart"></i></div><h3>E-commerce</h3><p>Online store solutions.</p></div>
+            </div>
+        </section>
+
+        <section class="about-section">
+            <div class="about-grid">
+                <div>
+                    <p class="section-label">Who We Are</p>
+                    <h2>Crafting Digital Excellence</h2>
+                    <p style="color: var(--text-secondary); margin: 1rem 0;">Full-service digital agency specializing in social media, advertising, creative design, and web development.</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item"><div class="stat-number">150+</div><div style="font-size: 0.8rem; color: var(--text-muted);">Projects</div></div>
+                    <div class="stat-item"><div class="stat-number">50+</div><div style="font-size: 0.8rem; color: var(--text-muted);">Clients</div></div>
+                    <div class="stat-item"><div class="stat-number">5+</div><div style="font-size: 0.8rem; color: var(--text-muted);">Years</div></div>
+                    <div class="stat-item"><div class="stat-number">24/7</div><div style="font-size: 0.8rem; color: var(--text-muted);">Support</div></div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header"><p class="section-label">Selected Work</p><h2 class="section-title">Featured Projects</h2></div>
+            <div class="work-grid">
+                <div class="work-item"><div class="work-placeholder">✦</div><div class="work-overlay"><p style="color: var(--gradient-2); font-size: 0.7rem;">Branding</p><h3>Luxe Brand Identity</h3></div></div>
+                <div class="work-item"><div class="work-placeholder">✦</div><div class="work-overlay"><p style="color: var(--gradient-2); font-size: 0.7rem;">Development</p><h3>E-commerce Platform</h3></div></div>
+                <div class="work-item"><div class="work-placeholder">✦</div><div class="work-overlay"><p style="color: var(--gradient-2); font-size: 0.7rem;">Social</p><h3>Campaign Strategy</h3></div></div>
+                <div class="work-item"><div class="work-placeholder">✦</div><div class="work-overlay"><p style="color: var(--gradient-2); font-size: 0.7rem;">Advertising</p><h3>Performance Marketing</h3></div></div>
+            </div>
+        </section>
+
+        <section class="contact-section" style="padding-top: 6rem;">
+            <div class="contact-grid">
+                <div>
+                    <p class="section-label">Let's Talk</p>
+                    <h2 style="margin-bottom: 1rem;">Ready to start?</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">We'd love to hear about your project.</p>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <a href="mailto:hello@agency.com" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-tertiary); border-radius: 12px;">
+                            <div style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--bg-secondary); border-radius: 10px;"><i class="ph ph-envelope"></i></div>
+                            <span>hello@agency.com</span>
+                        </a>
+                        <a href="tel:+15551234567" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-tertiary); border-radius: 12px;">
+                            <div style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--bg-secondary); border-radius: 10px;"><i class="ph ph-phone"></i></div>
+                            <span>+1 (555) 123-4567</span>
+                        </a>
+                    </div>
+                </div>
+                <form class="contact-form">
+                    <div class="form-group"><label>Name</label><input type="text" placeholder="Your name" required></div>
+                    <div class="form-group"><label>Email</label><input type="email" placeholder="your@email.com" required></div>
+                    <div class="form-group"><label>Service</label><select><option>Select a service...</option><option>Social Media</option><option>Digital Advertising</option><option>Creative Design</option><option>Web Development</option></select></div>
+                    <div class="form-group"><label>Message</label><textarea placeholder="Tell us about your project..." rows="4"></textarea></div>
+                    <button type="submit" class="btn-submit">Send Message</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">Agency.</div>
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="/capabilities">Services</a>
+                <a href="/work">Work</a>
+                <a href="/say-hi">Contact</a>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">© 2026 Agency. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) { document.documentElement.setAttribute('data-theme', savedTheme); updateThemeIcon(savedTheme); }
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+        function updateThemeIcon(theme) { themeIcon.className = theme === 'light' ? 'ph ph-sun' : 'ph ph-moon'; }
+
+        // Cursor
+        const cursor = document.querySelector('.cursor'), cursorDot = document.querySelector('.cursor-dot');
+        let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
+        document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; cursorDot.style.left = mouseX - 3 + 'px'; cursorDot.style.top = mouseY - 3 + 'px'; });
+        function animateCursor() { cursorX += (mouseX - cursorX) * 0.1; cursorY += (mouseY - cursorY) * 0.1; cursor.style.left = cursorX - 10 + 'px'; cursor.style.top = cursorY - 10 + 'px'; requestAnimationFrame(animateCursor); }
+        animateCursor();
+        document.querySelectorAll('a, button, .service-card, .work-item').forEach(el => { el.addEventListener('mouseenter', () => cursor.classList.add('hover')); el.addEventListener('mouseleave', () => cursor.classList.remove('hover')); });
+    </script>
+</body>
+</html>
